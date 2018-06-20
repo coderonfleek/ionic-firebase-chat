@@ -8,7 +8,7 @@ import { User, Chat } from "./app.models";
 import { appconfig } from "./app.config";
 
 @Injectable()
-export class TaskService {
+export class ChatService {
   users: AngularFirestoreCollection<User>;
   private userDoc: AngularFirestoreDocument<User>;
 
@@ -22,15 +22,15 @@ export class TaskService {
   }
 
   addUser(email) {
-    //First check if the user already exists
-    this.db.collection<User>(appconfig.users_endpoint, ref => {
-      return ref.where("email", "==", email);
-    });
+    let payload = {
+      email: email
+    };
+    return this.users.add(payload);
+  } //addUser
 
-    //if
-    //Add the new task to the collection
-    //this.tasks.add(task);
-  } //addTask
+  addChat(chat: Chat) {
+    return this.chats.add(chat);
+  } //addChat
 
   /* updateTask(id, update) {
     //Get the task document
