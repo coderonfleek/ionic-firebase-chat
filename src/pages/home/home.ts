@@ -10,13 +10,15 @@ import { Observable } from "rxjs";
 import { ChatService } from "../../app/app.service";
 import { Storage } from "@ionic/storage";
 import { ChatsPage } from "../chats/chats";
+import { appconfig } from "../../app/app.config";
 
 @Component({
   selector: "page-home",
   templateUrl: "home.html"
 })
 export class HomePage implements OnInit {
-  email: string;
+  //email: string;
+  loginForm: any = {};
   constructor(
     public navCtrl: NavController,
     private db: AngularFirestore,
@@ -27,44 +29,39 @@ export class HomePage implements OnInit {
   ) {}
 
   ngOnInit() {
-    /* let users = this.db
-      .collection<User>("users", ref => {
-        return ref.where('email', '==', 'fik4christ@yahoo.com')
-      })
-      .valueChanges()
-      .subscribe(users => {
-        console.log(users);
-      }); */
-    //Adding a User
-    /* let user = this.chatservice
-      .addUser("test@fikky.com")
-      .then(res => console.log(res))
-      .catch(err => console.log(err)); */
+    this.storage.get("chatuser").then(chatuser => {
+      if (chatuser && chatuser.email !== "") {
+        this.navCtrl.push(ChatsPage);
+      }
+    });
   }
 
   loginUser() {
-    if (this.email != "") {
+    if (this.loginForm.email != "") {
       //Check if email already exists
+      let myLoader = this.loadingCtrl.create({
+        content: "Please wait..."
+      });
+      myLoader.present().then(() => {
+        this.db
+          .collection<User>(appconfig.users_endpoint, ref => {
+            return ref.where("email", "==", this.loginForm.email);
+          })
+          .valueChanges()
+          .subscribe(users => {
+            console.log(users);
 
-      this.db
-        .collection<User>("users", ref => {
-          return ref.where("email", "==", this.email);
-        })
-        .valueChanges()
-        .subscribe(users => {
-          console.log(users);
+            if (users.length === 0) {
+              //Register User
 
-          if (users.length === 0) {
-            //Register User
-            let myLoader = this.loadingCtrl.create({
-              content: "Please wait..."
-            });
-            myLoader.present().then(() => {
+              //Add the timestamp
+              this.loginForm.time = new Date().getTime();
+
               this.chatservice
-                .addUser(this.email)
+                .addUser(this.loginForm)
                 .then(res => {
                   //Registration successful, go to chats page
-                  this.storage.set("chatuser", this.email);
+                  this.storage.set("chatuser", this.loginForm);
                   myLoader.dismiss();
 
                   let toast = this.toastCtrl.create({
@@ -80,21 +77,22 @@ export class HomePage implements OnInit {
                   console.log(err);
                   myLoader.dismiss();
                 });
-            });
-          } else {
-            //User already exists, move to chats page
-            this.storage.set("chatuser", this.email);
+            } else {
+              //User already exists, move to chats page
+              this.storage.set("chatuser", users[0]);
 
-            let toast = this.toastCtrl.create({
-              message: "Login In Successful",
-              duration: 3000,
-              position: "top"
-            });
-            toast.present();
+              let toast = this.toastCtrl.create({
+                message: "Login In Successful",
+                duration: 3000,
+                position: "top"
+              });
+              toast.present();
+              myLoader.dismiss();
 
-            this.navCtrl.push(ChatsPage);
-          }
-        });
+              this.navCtrl.push(ChatsPage);
+            }
+          });
+      });
     } else {
       let toast = this.toastCtrl.create({
         message: "Enter Email to log in",

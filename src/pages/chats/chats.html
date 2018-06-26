@@ -7,12 +7,68 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>chats</ion-title>
+    <ion-title>{{chatuser?.name}}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+
+  <ion-list>
+    <ion-list-header>
+      USERS
+    </ion-list-header>
+    <ion-item *ngFor="let user of availableusers" (click)="goToChat(user)">
+      <ion-avatar item-start>
+        <img src="http://via.placeholder.com/16x16">
+      </ion-avatar>
+      <h2>{{user.name || "Anonymous"}}</h2>
+
+      <p>{{user.email}}</p>
+    </ion-item>
+
+
+
+  </ion-list>
+
+  <!--<ion-list class="list list-ios">
+
+    <ion-list-header class="item item-ios list-header list-header-ios">
+      <div class="item-inner">
+        <div class="input-wrapper">
+
+          <ion-label class="label label-ios">Chats</ion-label>
+        </div>
+
+      </div>
+      <div class="button-effect"></div>
+    </ion-list-header>
+
+    
+
+
+
+    <ion-item class="item item-block item-ios">
+      <ion-avatar item-start="">
+        <img src="assets/img/avatar-ts-potatohead.png">
+      </ion-avatar>
+       <div class="item-inner">
+        <div class="input-wrapper">
+         
+          <ion-label class="label label-ios">
+
+            <h2>Mr. Potato Head</h2>
+            <p>You're not turning me into a Mashed Potato.</p>
+
+          </ion-label>
+        </div>
+        <ion-note item-end="" class="note note-ios">5:47 am</ion-note>
+        
+      </div>
+      <div class="button-effect"></div>
+    </ion-item> 
+
+  </ion-list>-->
 
 </ion-content>

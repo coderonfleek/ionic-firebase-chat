@@ -6,5 +6,5 @@ export interface Chat {
   message: string;
   pair: string;
   sender: string;
-  time: string;
+  time: number;
 }

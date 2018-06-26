@@ -1,0 +1,20 @@
+page-chatroom {
+}
+
+#chatPage {
+  display: flex;
+  flex-direction: row;
+  .chat {
+    background-color: pink;
+    border: none;
+    width: 90%;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    align-self: flex-end;
+  }
+
+  .chat-partner {
+    margin-left: 10%;
+    background-color: skyblue;
+  }
+}

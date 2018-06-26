@@ -1,0 +1,54 @@
+<!--
+  Generated template for the ChatroomPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{chatpartner.name}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content #content padding id="chatPage">
+
+  <!-- <ion-list [virtualScroll]="chats | sort:'time'">
+
+    <ion-item *virtualItem="let chat" class="chat" text-wrap [ngClass]="{'chat-partner' : isChatPartner(chat.sender)}">
+      {{chat.message}}
+    </ion-item>
+
+  </ion-list> -->
+
+  <ion-list>
+
+    <ion-item *ngFor="let chat of chats | sort:'time'" class="chat" text-wrap [ngClass]="{'chat-partner' : isChatPartner(chat.sender)}">
+      {{chat.message}}
+    </ion-item>
+
+  </ion-list>
+
+
+
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-row>
+      <ion-col col-10>
+        <ion-input type="text" [(ngModel)]="message" placeholder="Enter Message...."></ion-input>
+      </ion-col>
+      <ion-col col-2>
+        <button ion-button block (click)="addChat()">
+          Send
+        </button>
+      </ion-col>
+    </ion-row>
+
+
+  </ion-toolbar>
+</ion-footer>

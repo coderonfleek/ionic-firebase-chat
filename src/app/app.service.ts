@@ -15,22 +15,34 @@ export class ChatService {
   chats: AngularFirestoreCollection<Chat>;
   private chatDoc: AngularFirestoreDocument<Chat>;
 
+  //The pair string for the two users currently chatting
+  currentChatPairId;
+  currentChatPartner;
+
   constructor(private db: AngularFirestore) {
     //Get the tasks collecction
     this.users = db.collection<User>(appconfig.users_endpoint);
-    this.users = db.collection<User>(appconfig.users_endpoint);
+    this.chats = db.collection<Chat>(appconfig.chats_endpoint);
   }
 
-  addUser(email) {
-    let payload = {
-      email: email
-    };
+  addUser(payload) {
     return this.users.add(payload);
   } //addUser
 
   addChat(chat: Chat) {
     return this.chats.add(chat);
   } //addChat
+
+  createPairId(user1, user2) {
+    let pairId;
+    if (user1.time < user2.time) {
+      pairId = `${user1.email}|${user2.email}`;
+    } else {
+      pairId = `${user2.email}|${user1.email}`;
+    }
+
+    return pairId;
+  } //createPairString
 
   /* updateTask(id, update) {
     //Get the task document
